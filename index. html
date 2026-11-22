@@ -1,1 +1,270 @@
 
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dental Pro | نظام إدارة العيادة</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --navy:#10243e;
+  --gold:#c9a45c;
+  --bg:#f4f6fa;
+  --white:#fff;
+  --text:#26364b;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text)}
+button,input,select{font:inherit}
+button{cursor:pointer;border:0}
+.app{display:flex;min-height:100vh}
+.sidebar{width:250px;background:var(--navy);color:white;padding:25px 17px;display:flex;flex-direction:column;flex-shrink:0}
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:45px}
+.logo{background:var(--gold);color:var(--navy);width:45px;height:45px;border-radius:13px;display:grid;place-items:center;font-size:25px}
+.brand h2{font-size:20px}
+.brand small{font-size:9px;color:#b9c6d5}
+.menu-title{color:#91a1b5;font-size:12px;margin:0 12px 15px}
+nav{display:grid;gap:9px}
+.nav-link{background:transparent;color:#c7d1de;text-align:right;padding:13px;border-radius:9px;display:flex;gap:12px;align-items:center}
+.nav-link.active,.nav-link:hover{background:#29415e;color:white}
+.nav-link.active{border-right:3px solid var(--gold)}
+.profile{margin-top:auto;border-top:1px solid #40516a;padding-top:20px;display:flex;align-items:center;gap:10px}
+.avatar{background:var(--gold);color:var(--navy);width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-weight:bold}
+.profile small{display:block;color:#aab7c8}
+.main{flex:1;min-width:0;padding:30px}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px;gap:12px}
+.topbar p,.section-heading p{font-size:12px;color:#8491a3}
+.primary{background:var(--navy);color:white;padding:11px 18px;border-radius:9px}
+.primary:hover{background:#294766}
+.welcome{background:linear-gradient(110deg,#10243e,#315273);color:white;border-radius:16px;padding:30px;display:flex;justify-content:space-between;align-items:center;min-height:190px}
+.welcome span{color:var(--gold)}
+.welcome h1{font-size:30px;margin:8px 0}
+.welcome p{font-size:13px;color:#c5d1df}
+.symbol{font-size:100px;color:#d6b76e;opacity:.6}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin:25px 0 32px}
+.stat{background:white;padding:20px;border-radius:13px;border:1px solid #e9edf3}
+.stat p{color:#8793a3;font-size:12px}
+.stat h2{font-size:30px;color:var(--navy);margin:8px 0}
+.section-heading{display:flex;justify-content:space-between;align-items:center;margin-bottom:17px;gap:10px}
+.section-heading h2{font-size:19px}
+.table-wrap{background:white;border-radius:12px;overflow-x:auto;border:1px solid #e9edf3}
+table{width:100%;min-width:550px;border-collapse:collapse;text-align:right}
+th,td{padding:14px;border-bottom:1px solid #edf0f4;font-size:13px}
+th{background:#f9fafc;color:#77859a}
+.status{background:#e8f7ef;color:#219467;padding:5px 11px;border-radius:20px;font-size:11px}
+.page{display:none}
+.page.active{display:block;animation:fade .3s}
+@keyframes fade{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+.search,.modal input,.modal select{width:100%;padding:12px;border:1px solid #e1e6ee;border-radius:8px;margin-bottom:15px;outline:none;background:white}
+.doctors{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+.doctor{background:white;padding:25px;border-radius:13px;text-align:center;border:1px solid #e9edf3}
+.doctor .symbol2{font-size:38px;color:var(--gold);margin-bottom:12px}
+.doctor p{font-size:13px;color:#8793a3;margin:8px 0}
+.doctor span{color:#aa8742;font-size:12px}
+.delete{background:#fff0f0;color:#d44c4c;padding:6px 10px;border-radius:7px}
+footer{text-align:center;color:#99a3b0;font-size:11px;padding:30px}
+.modal{display:none;position:fixed;inset:0;background:#07182dcc;z-index:5;align-items:center;justify-content:center;padding:15px}
+.modal.show{display:flex}
+.modal-box{background:white;width:100%;max-width:430px;padding:27px;border-radius:15px;position:relative;max-height:95vh;overflow-y:auto}
+.modal-box h2{margin-bottom:5px}
+.modal-box p{font-size:12px;color:#8793a3;margin-bottom:20px}
+.modal label{display:block;font-size:13px;margin-bottom:5px}
+.close{position:absolute;left:17px;top:10px;font-size:25px;background:none;color:#777}
+.full{width:100%}
+@media(max-width:900px){.stats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:650px){
+.app{display:block}
+.sidebar{width:100%;padding:15px}
+.brand{margin-bottom:15px}
+.menu-title,.profile{display:none}
+nav{display:flex;overflow-x:auto}
+.nav-link{white-space:nowrap;padding:10px;font-size:12px}
+.main{padding:18px 12px}
+.topbar{align-items:flex-start;flex-direction:column}
+.welcome{padding:20px}
+.welcome h1{font-size:22px}
+.symbol{font-size:60px}
+.stats{gap:9px}
+.stat{padding:13px}
+.stat h2{font-size:23px}
+.doctors{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+<aside class="sidebar">
+  <div class="brand">
+    <div class="logo">✦</div>
+    <div><h2>Dental Pro</h2><small>CLINIC MANAGEMENT</small></div>
+  </div>
+  <p class="menu-title">القائمة الرئيسية</p>
+  <nav>
+    <button class="nav-link active" data-page="dashboard">▦ لوحة التحكم</button>
+    <button class="nav-link" data-page="patients">♙ المرضى</button>
+    <button class="nav-link" data-page="appointments">▣ المواعيد</button>
+    <button class="nav-link" data-page="doctors">⚕ الأطباء</button>
+  </nav>
+  <div class="profile">
+    <div class="avatar">A</div>
+    <div>مدير العيادة<small>Administrator</small></div>
+  </div>
+</aside>
+
+<main class="main">
+<header class="topbar">
+  <div><h2 id="page-title">لوحة التحكم</h2><p>مرحباً بك في نظام إدارة العيادة</p></div>
+  <button class="primary" onclick="openModal()">+ إضافة موعد</button>
+</header>
+
+<section id="dashboard" class="page active">
+  <div class="welcome">
+    <div><span>نظام الإدارة الذكي</span><h1>رعاية أفضل، إدارة أذكى.</h1><p>كل ما تحتاجه لإدارة عيادتك في مكان واحد.</p></div>
+    <div class="symbol">✦</div>
+  </div>
+  <div class="stats">
+    <div class="stat"><p>إجمالي المرضى</p><h2 id="total-patients">0</h2><small>المرضى المسجلون</small></div>
+    <div class="stat"><p>إجمالي المواعيد</p><h2 id="total-appointments">0</h2><small>جميع الحجوزات</small></div>
+    <div class="stat"><p>مواعيد اليوم</p><h2 id="today-appointments">0</h2><small>حجوزات اليوم</small></div>
+    <div class="stat"><p>الأطباء</p><h2>3</h2><small>الفريق الطبي</small></div>
+  </div>
+  <div class="section-heading"><div><h2>آخر المواعيد</h2><p>أحدث الحجوزات</p></div><button class="primary" onclick="showPage('appointments')">عرض الكل</button></div>
+  <div class="table-wrap"><table><thead><tr><th>المريض</th><th>الهاتف</th><th>الطبيب</th><th>التاريخ</th><th>الحالة</th></tr></thead><tbody id="recent-table"></tbody></table></div>
+</section>
+
+<section id="patients" class="page">
+  <div class="section-heading"><div><h2>إدارة المرضى</h2><p>ملفات المرضى</p></div><button class="primary" onclick="addPatient()">+ إضافة مريض</button></div>
+  <input class="search" id="patient-search" placeholder="ابحث عن مريض..." oninput="renderPatients()">
+  <div class="table-wrap"><table><thead><tr><th>الاسم</th><th>الهاتف</th><th>تاريخ التسجيل</th></tr></thead><tbody id="patients-table"></tbody></table></div>
+</section>
+
+<section id="appointments" class="page">
+  <div class="section-heading"><div><h2>إدارة المواعيد</h2><p>جميع الحجوزات</p></div><button class="primary" onclick="openModal()">+ موعد جديد</button></div>
+  <div class="table-wrap"><table><thead><tr><th>المريض</th><th>الهاتف</th><th>الطبيب</th><th>التاريخ</th><th>الحالة</th><th>حذف</th></tr></thead><tbody id="appointments-table"></tbody></table></div>
+</section>
+
+<section id="doctors" class="page">
+  <div class="section-heading"><div><h2>الفريق الطبي</h2><p>أطباؤنا المتخصصون</p></div></div>
+  <div class="doctors">
+    <div class="doctor"><div class="symbol2">⚕</div><h3>د. محمد عدنان</h3><p>طب وجراحة الأسنان</p><span>طبيب متخصص</span></div>
+    <div class="doctor"><div class="symbol2">⚕</div><h3>د. جبر أحمد</h3><p>تركيبات وتجميل الأسنان</p><span>طبيب متخصص</span></div>
+    <div class="doctor"><div class="symbol2">⚕</div><h3>د. أحمد بلال</h3><p>طبيب أسنان عام</p><span>طبيب متخصص</span></div>
+  </div>
+</section>
+
+<footer>Dental Pro © 2026 — جميع الحقوق محفوظة</footer>
+</main>
+</div>
+
+<div class="modal" id="appointment-modal">
+<div class="modal-box">
+<button class="close" onclick="closeModal()">×</button>
+<h2>إضافة موعد جديد</h2><p>أدخل بيانات المريض والحجز</p>
+<form id="appointment-form">
+<label>اسم المريض</label><input id="patient-name" required placeholder="الاسم الكامل">
+<label>رقم الهاتف</label><input id="patient-phone" required type="tel" placeholder="رقم الهاتف">
+<label>الطبيب</label>
+<select id="doctor-name" required>
+<option value="">اختر الطبيب</option>
+<option>د. محمد عدنان</option><option>د. جبر أحمد</option><option>د. أحمد بلال</option>
+</select>
+<label>تاريخ الموعد</label><input id="appointment-date" type="date" required>
+<button class="primary full" type="submit">حفظ الموعد</button>
+</form>
+</div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+
+let patients = JSON.parse(localStorage.getItem("dentalPatients")) || [];
+let appointments = JSON.parse(localStorage.getItem("dentalAppointments")) || [];
+
+function saveData(){
+  localStorage.setItem("dentalPatients",JSON.stringify(patients));
+  localStorage.setItem("dentalAppointments",JSON.stringify(appointments));
+}
+
+function escapeHTML(value){
+  return String(value).replace(/[&<>"']/g,c=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  })[c]);
+}
+
+function showPage(page){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.querySelectorAll(".nav-link").forEach(b=>b.classList.remove("active"));
+  $(page).classList.add("active");
+  document.querySelector(`[data-page="${page}"]`).classList.add("active");
+  const titles={dashboard:"لوحة التحكم",patients:"إدارة المرضى",appointments:"إدارة المواعيد",doctors:"الفريق الطبي"};
+  $("page-title").textContent=titles[page];
+  renderAll();
+}
+
+document.querySelectorAll(".nav-link").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page)));
+
+function openModal(){$("appointment-modal").classList.add("show")}
+function closeModal(){$("appointment-modal").classList.remove("show")}
+
+function addPatient(){
+  const name=prompt("أدخل اسم المريض:");
+  if(!name || !name.trim())return;
+  const phone=prompt("أدخل رقم الهاتف:");
+  if(!phone || !phone.trim())return;
+  if(patients.some(p=>p.phone===phone.trim()))return alert("هذا المريض مسجل مسبقاً");
+  patients.push({id:Date.now(),name:name.trim(),phone:phone.trim(),date:new Date().toLocaleDateString("en-GB")});
+  saveData();renderAll();
+}
+
+$("appointment-form").addEventListener("submit",e=>{
+  e.preventDefault();
+  const name=$("patient-name").value.trim();
+  const phone=$("patient-phone").value.trim();
+  const doctor=$("doctor-name").value;
+  const date=$("appointment-date").value;
+  let patient=patients.find(p=>p.phone===phone);
+  if(!patient){
+    patients.push({id:Date.now(),name,phone,date:new Date().toLocaleDateString("en-GB")});
+  }else{patient.name=name;}
+  appointments.push({id:Date.now()+1,name,phone,doctor,date,status:"مؤكد"});
+  saveData();renderAll();e.target.reset();closeModal();
+  alert("تم حفظ الموعد بنجاح!");
+});
+
+function deleteAppointment(id){
+  if(!confirm("هل تريد حذف الموعد؟"))return;
+  appointments=appointments.filter(a=>a.id!==id);
+  saveData();renderAll();
+}
+
+function renderPatients(){
+  const search=$("patient-search").value.toLowerCase();
+  const data=patients.filter(p=>p.name.toLowerCase().includes(search)||p.phone.includes(search));
+  $("patients-table").innerHTML=data.map(p=>`<tr><td>${escapeHTML(p.name)}</td><td>${escapeHTML(p.phone)}</td><td>${escapeHTML(p.date)}</td></tr>`).join("")||'<tr><td colspan="3">لا توجد بيانات مرضى</td></tr>';
+}
+
+function renderAppointments(){
+  $("appointments-table").innerHTML=appointments.map(a=>`<tr><td>${escapeHTML(a.name)}</td><td>${escapeHTML(a.phone)}</td><td>${escapeHTML(a.doctor)}</td><td>${escapeHTML(a.date)}</td><td><span class="status">${escapeHTML(a.status)}</span></td><td><button class="delete" onclick="deleteAppointment(${a.id})">حذف</button></td></tr>`).join("")||'<tr><td colspan="6">لا توجد مواعيد</td></tr>';
+}
+
+function renderDashboard(){
+  const today=new Date().toLocaleDateString("en-CA");
+  $("total-patients").textContent=patients.length;
+  $("total-appointments").textContent=appointments.length;
+  $("today-appointments").textContent=appointments.filter(a=>a.date===today).length;
+  $("recent-table").innerHTML=[...appointments].reverse().slice(0,5).map(a=>`<tr><td>${escapeHTML(a.name)}</td><td>${escapeHTML(a.phone)}</td><td>${escapeHTML(a.doctor)}</td><td>${escapeHTML(a.date)}</td><td><span class="status">${escapeHTML(a.status)}</span></td></tr>`).join("")||'<tr><td colspan="5">لا توجد مواعيد مسجلة</td></tr>';
+}
+
+function renderAll(){renderDashboard();renderPatients();renderAppointments()}
+
+$("patient-search").addEventListener("input",renderPatients);
+$("appointment-date").min=new Date().toLocaleDateString("en-CA");
+renderAll();
+</script>
+</body>
+</html>
